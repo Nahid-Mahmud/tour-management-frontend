@@ -7,7 +7,7 @@ import {
   NavigationMenuList,
 } from "@/components/ui/navigation-menu";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
-import { Link } from "react-router";
+import NavItem from "../NavItem";
 
 // Navigation links array to be used in both desktop and mobile menus
 const navigationLinks = [
@@ -77,7 +77,7 @@ export default function Component() {
                 {navigationLinks.map((link, index) => (
                   <NavigationMenuItem key={index}>
                     <NavigationMenuLink asChild className="text-muted-foreground hover:text-primary py-1.5 font-medium">
-                      <Link to={link.href}> {link.label}</Link>
+                      <NavItem to={link.href} label={link.label} />
                     </NavigationMenuLink>
                   </NavigationMenuItem>
                 ))}
