@@ -1,8 +1,40 @@
 import { Button } from "@/components/ui/button";
+import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
+import { Input } from "@/components/ui/input";
 import { cn } from "@/lib/utils";
+import { useForm } from "react-hook-form";
 import { Link } from "react-router";
+import { zodResolver } from "@hookform/resolvers/zod";
+
+import { z } from "zod";
+
+const formSchema = z
+  .object({
+    name: z.string().min(2).max(100).nonempty(),
+    email: z.email(),
+    password: z.string().min(8).max(100).nonempty(),
+    confirmPassword: z.string().min(8).max(100).nonempty(),
+  })
+  .refine((data) => data.password === data.confirmPassword, {
+    message: "Passwords don't match",
+    path: ["confirmPassword"],
+  });
 
 export function RegisterForm({ className, ...props }: React.HTMLAttributes<HTMLDivElement>) {
+  const form = useForm({
+    resolver: zodResolver(formSchema),
+    defaultValues: {
+      name: "",
+      email: "",
+      password: "",
+      confirmPassword: "",
+    },
+  });
+
+  const onsubmit = (data) => {
+    console.log("Form submitted with data:", data);
+  };
+
   return (
     <div className={cn("flex flex-col gap-6", className)} {...props}>
       <div className="flex flex-col items-center gap-2 text-center">
@@ -11,6 +43,26 @@ export function RegisterForm({ className, ...props }: React.HTMLAttributes<HTMLD
       </div>
 
       <div className="grid gap-6">
+        <Form {...form}>
+          <form onSubmit={form.handleSubmit(onsubmit)}>
+            <FormField
+              control={form.control}
+              name="name"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Name</FormLabel>
+                  <FormControl>
+                    <Input placeholder="John Doe" {...field} />
+                  </FormControl>
+                  <FormDescription>This is your public display name.</FormDescription>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />{" "}
+            <Button type="submit">Submit</Button>
+          </form>
+        </Form>
+
         <div className="relative text-center text-sm after:absolute after:inset-0 after:top-1/2 after:z-0 after:flex after:items-center after:border-t after:border-border">
           <span className="relative z-10 bg-background px-2 text-muted-foreground">Or continue with</span>
         </div>
