@@ -1,4 +1,4 @@
-import { baseApi } from "@/types/api/baseApi";
+import { baseApi } from "@/redux/baseApi";
 
 const booksApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
