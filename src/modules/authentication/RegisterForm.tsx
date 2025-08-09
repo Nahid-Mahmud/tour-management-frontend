@@ -2,10 +2,12 @@ import { Button } from "@/components/ui/button";
 import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { cn } from "@/lib/utils";
+import { useRegisterMutation } from "@/redux/features/auth/auth.api";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { Link } from "react-router";
+import { toast } from "sonner";
 
 import { z } from "zod";
 
@@ -46,6 +48,8 @@ const registerSchema = z
 export function RegisterForm({ className, ...props }: React.HTMLAttributes<HTMLDivElement>) {
   const [showPassword, setShowPassword] = useState<boolean>(false);
 
+  const [registerFn, { isLoading: registerLoading }] = useRegisterMutation();
+
   const form = useForm({
     resolver: zodResolver(registerSchema),
     defaultValues: {
@@ -56,8 +60,25 @@ export function RegisterForm({ className, ...props }: React.HTMLAttributes<HTMLD
     },
   });
 
-  const onsubmit = (data: z.infer<typeof registerSchema>) => {
+  const onsubmit = async (data: z.infer<typeof registerSchema>) => {
     console.log("Form submitted with data:", data);
+
+    const dataToSend = {
+      name: data.name,
+      email: data.email,
+      password: data.password,
+    };
+
+    try {
+      const result = await registerFn(dataToSend).unwrap();
+      if (result.success) {
+        toast.success("Registration successful!");
+      }
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    } catch (error: any) {
+      console.error("Registration failed:", error);
+      toast.error(error?.data?.message || "Registration failed. Please try again.");
+    }
   };
 
   return (
@@ -170,12 +191,8 @@ export function RegisterForm({ className, ...props }: React.HTMLAttributes<HTMLD
                 </FormItem>
               )}
             />{" "}
-            <Button
-              type="submit"
-              className="w-full"
-              // disabled={!form.formState.isValid || form.formState.isSubmitting}
-            >
-              Submit
+            <Button type="submit" className="w-full cursor-pointer" disabled={registerLoading}>
+              {registerLoading ? `Loading...` : `Submit`}
             </Button>
           </form>
         </Form>
