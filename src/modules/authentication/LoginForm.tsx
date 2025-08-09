@@ -2,11 +2,13 @@ import { Button } from "@/components/ui/button";
 import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { cn } from "@/lib/utils";
+import { useLoginMutation } from "@/redux/features/auth/auth.api";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { LucideEye, LucideEyeClosed } from "lucide-react";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { Link } from "react-router";
+import { toast } from "sonner";
 import z from "zod";
 
 const loginSchema = z.object({
@@ -15,6 +17,8 @@ const loginSchema = z.object({
 });
 
 export function LoginForm({ className, ...props }: React.HTMLAttributes<HTMLDivElement>) {
+  const [loginFn, { isLoading: loginLoading }] = useLoginMutation();
+
   const [showPassword, setShowPassword] = useState<boolean>(false);
 
   const form = useForm({
@@ -27,11 +31,25 @@ export function LoginForm({ className, ...props }: React.HTMLAttributes<HTMLDivE
 
   const handleSubmit = async (data: z.infer<typeof loginSchema>) => {
     console.log(data);
+    try {
+      const res = await loginFn({
+        email: data.email,
+        password: data.password,
+      }).unwrap();
+
+      if (res.success) {
+        toast.success("Login successful");
+      }
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    } catch (error: any) {
+      toast.error(error.data.message || "Login failed");
+    }
   };
 
   return (
     <div className={cn("flex flex-col gap-6", className)} {...props}>
       <div className="flex flex-col items-center gap-2 text-center">
+        <h2 className="text-5xl font-thin">Ruhi</h2>
         <h1 className="text-2xl font-bold">Login to your account</h1>
         <p className="text-balance text-sm text-muted-foreground">
           Enter your email and password below to login to your account
@@ -78,8 +96,8 @@ export function LoginForm({ className, ...props }: React.HTMLAttributes<HTMLDivE
                 {showPassword ? <LucideEye /> : <LucideEyeClosed />}
               </Button>
             </div>
-            <Button type="submit" className="w-full">
-              Submit
+            <Button disabled={loginLoading} type="submit" className="w-full cursor-pointer">
+              {loginLoading ? "Loading..." : "Submit"}
             </Button>
           </form>
         </Form>

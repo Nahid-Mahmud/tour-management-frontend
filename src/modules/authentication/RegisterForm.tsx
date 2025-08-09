@@ -77,6 +77,7 @@ export function RegisterForm({ className, ...props }: React.HTMLAttributes<HTMLD
           description: "Please Verify your account",
           // icon: <CircleCheckBig />,
         });
+        form.reset();
       }
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (error: any) {

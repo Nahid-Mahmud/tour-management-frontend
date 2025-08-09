@@ -3,6 +3,8 @@ import About from "@/pages/About";
 import Home from "@/pages/Home";
 import Login from "@/pages/Login";
 import Register from "@/pages/Register";
+import Verify from "@/pages/Verify";
+
 import { createBrowserRouter } from "react-router";
 
 const routes = createBrowserRouter([
@@ -27,6 +29,10 @@ const routes = createBrowserRouter([
   {
     path: "/register",
     element: <Register />,
+  },
+  {
+    path: "/verify",
+    element: <Verify />,
   },
 ]);
 
