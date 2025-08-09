@@ -7,7 +7,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { LucideEye, LucideEyeClosed } from "lucide-react";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
-import { Link } from "react-router";
+import { Link, useNavigate } from "react-router";
 import { toast } from "sonner";
 
 import { z } from "zod";
@@ -47,6 +47,8 @@ const registerSchema = z
   });
 
 export function RegisterForm({ className, ...props }: React.HTMLAttributes<HTMLDivElement>) {
+  const navigate = useNavigate();
+
   const [showPassword, setShowPassword] = useState<boolean>(false);
 
   const [registerFn, { isLoading: registerLoading }] = useRegisterMutation();
@@ -75,9 +77,9 @@ export function RegisterForm({ className, ...props }: React.HTMLAttributes<HTMLD
       if (result.success) {
         toast.success("Registration successful!", {
           description: "Please Verify your account",
-          // icon: <CircleCheckBig />,
         });
         form.reset();
+        navigate("/verify");
       }
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (error: any) {

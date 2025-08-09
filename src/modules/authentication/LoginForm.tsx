@@ -7,7 +7,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { LucideEye, LucideEyeClosed } from "lucide-react";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
-import { Link } from "react-router";
+import { Link, useNavigate } from "react-router";
 import { toast } from "sonner";
 import z from "zod";
 
@@ -17,6 +17,7 @@ const loginSchema = z.object({
 });
 
 export function LoginForm({ className, ...props }: React.HTMLAttributes<HTMLDivElement>) {
+  const navigate = useNavigate();
   const [loginFn, { isLoading: loginLoading }] = useLoginMutation();
 
   const [showPassword, setShowPassword] = useState<boolean>(false);
@@ -43,6 +44,11 @@ export function LoginForm({ className, ...props }: React.HTMLAttributes<HTMLDivE
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (error: any) {
       toast.error(error.data.message || "Login failed");
+      if (error.data.message === "User is not verified") {
+        navigate("/verify", {
+          state: data.email,
+        });
+      }
     }
   };
 

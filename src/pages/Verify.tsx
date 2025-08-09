@@ -1,48 +1,46 @@
-"use client";
-
-import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { InputOTP, InputOTPGroup, InputOTPSlot } from "@/components/ui/input-otp";
-
+import TimerDisplay from "@/components/TimerDisplay";
 import { ArrowLeft, Mail, Shield } from "lucide-react";
-import { Link } from "react-router";
+import { memo, useCallback, useEffect, useState } from "react";
+import { Link, useLocation, useNavigate } from "react-router";
 
-export default function Verify() {
+function VerifyComponent() {
+  const location = useLocation();
+  const navigate = useNavigate();
+
+  console.log(location.state);
+
   const [otp, setOtp] = useState("");
-
   const [isResending, setIsResending] = useState(false);
+  const [resetTrigger, setResetTrigger] = useState(0);
+  const [canResend, setCanResend] = useState(false);
 
-  const [timer, setTimer] = useState(180);
+  const handleSubmit = useCallback(async () => {}, []);
 
-  const handleSubmit = async () => {};
+  const handleTimerEnd = useCallback(() => {
+    setCanResend(true);
+  }, []);
 
-  const handleResend = async () => {
+  const handleResend = useCallback(async () => {
     setIsResending(true);
+    setCanResend(false);
 
     // Simulate resend API call
     setTimeout(() => {
       setIsResending(false);
-      setTimer(5);
-      //   alert("New OTP code sent!");
+      setResetTrigger((prev) => prev + 1); // Trigger timer reset
     }, 1000);
-  };
+  }, []);
 
   useEffect(() => {
-    // Only start timer if timer > 0
-    if (timer <= 0) return;
+    if (!location.state) {
+      navigate("/");
+    }
+  }, []);
 
-    const interval = setInterval(() => {
-      setTimer((prev) => {
-        if (prev <= 1) {
-          return 0;
-        }
-        return prev - 1;
-      });
-    }, 1000);
-
-    return () => clearInterval(interval);
-  }, [timer]); // Add timer as dependency
+  if (!location.state) return null;
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100 flex items-center justify-center p-4">
@@ -101,11 +99,11 @@ export default function Verify() {
           </CardContent>
 
           <CardFooter className="flex flex-col space-y-4 text-center">
-            <div className="text-sm text-muted-foreground">{"Didn't receive the code?" + " " + timer + ` seconds`}</div>
+            <TimerDisplay onTimerEnd={handleTimerEnd} initialTime={180} resetTrigger={resetTrigger} />
             <Button
               variant="outline"
               onClick={handleResend}
-              disabled={isResending || !!timer}
+              disabled={isResending || !canResend}
               className="w-full bg-transparent"
             >
               <Mail className="w-4 h-4 mr-2" />
@@ -122,3 +120,7 @@ export default function Verify() {
     </div>
   );
 }
+
+// Wrap the component with React.memo to prevent unnecessary re-renders
+// Only re-render when props actually change
+export default memo(VerifyComponent);

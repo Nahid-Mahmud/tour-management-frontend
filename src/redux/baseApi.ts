@@ -1,10 +1,8 @@
-import { envConfig } from "@/config";
-import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
+import { createApi } from "@reduxjs/toolkit/query/react";
+import axiosBaseQuery from "./axiosBaseQuery";
 
 export const baseApi = createApi({
-  baseQuery: fetchBaseQuery({
-    baseUrl: envConfig.baseUrl,
-  }),
+  baseQuery: axiosBaseQuery(),
   endpoints: () => ({}),
   tagTypes: ["Books"],
 });
