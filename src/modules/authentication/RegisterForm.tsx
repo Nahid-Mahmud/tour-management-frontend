@@ -4,6 +4,7 @@ import { Input } from "@/components/ui/input";
 import { cn } from "@/lib/utils";
 import { useRegisterMutation } from "@/redux/features/auth/auth.api";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { LucideEye, LucideEyeClosed } from "lucide-react";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { Link } from "react-router";
@@ -72,7 +73,10 @@ export function RegisterForm({ className, ...props }: React.HTMLAttributes<HTMLD
     try {
       const result = await registerFn(dataToSend).unwrap();
       if (result.success) {
-        toast.success("Registration successful!");
+        toast.success("Registration successful!", {
+          description: "Please Verify your account",
+          // icon: <CircleCheckBig />,
+        });
       }
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (error: any) {
@@ -139,42 +143,7 @@ export function RegisterForm({ className, ...props }: React.HTMLAttributes<HTMLD
                 onClick={() => setShowPassword(!showPassword)}
                 className={`bg-transparent text-black hover:bg-transparent shadow-none absolute right-0 top-[1.4rem] cursor-pointer`}
               >
-                {showPassword ? (
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    width="24"
-                    height="24"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    stroke-width="2"
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    className="lucide lucide-eye-icon lucide-eye"
-                  >
-                    <path d="M2.062 12.348a1 1 0 0 1 0-.696 10.75 10.75 0 0 1 19.876 0 1 1 0 0 1 0 .696 10.75 10.75 0 0 1-19.876 0" />
-                    <circle cx="12" cy="12" r="3" />
-                  </svg>
-                ) : (
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    width="24"
-                    height="24"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    stroke-width="2"
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    className="lucide lucide-eye-closed-icon lucide-eye-closed"
-                  >
-                    <path d="m15 18-.722-3.25" />
-                    <path d="M2 8a10.645 10.645 0 0 0 20 0" />
-                    <path d="m20 15-1.726-2.05" />
-                    <path d="m4 15 1.726-2.05" />
-                    <path d="m9 18 .722-3.25" />
-                  </svg>
-                )}
+                {showPassword ? <LucideEye /> : <LucideEyeClosed />}
               </Button>
             </div>
             <FormField
