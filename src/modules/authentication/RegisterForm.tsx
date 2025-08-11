@@ -79,7 +79,9 @@ export function RegisterForm({ className, ...props }: React.HTMLAttributes<HTMLD
           description: "Please Verify your account",
         });
         form.reset();
-        navigate("/verify");
+        navigate("/verify", {
+          state: data.email,
+        });
       }
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (error: any) {
