@@ -16,7 +16,7 @@ type TVerifyOtp = {
   otp: string;
 };
 
-const authApi = baseApi.injectEndpoints({
+export const authApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
     register: builder.mutation({
       query: (data) => ({
@@ -48,7 +48,31 @@ const authApi = baseApi.injectEndpoints({
         data: data,
       }),
     }),
+
+    userInfo: builder.query<TResponse<null>, void>({
+      query: () => ({
+        url: "/user/me",
+        method: "GET",
+      }),
+      providesTags: ["User"],
+    }),
+
+    //  /auth/logout
+    logout: builder.mutation({
+      query: () => ({
+        url: "/auth/logout",
+        method: "POST",
+      }),
+      invalidatesTags: ["User"],
+    }),
   }),
 });
 
-export const { useRegisterMutation, useLoginMutation, useSendOtpMutation, useVerifyOtpMutation } = authApi;
+export const {
+  useRegisterMutation,
+  useLoginMutation,
+  useSendOtpMutation,
+  useVerifyOtpMutation,
+  useUserInfoQuery,
+  useLogoutMutation,
+} = authApi;

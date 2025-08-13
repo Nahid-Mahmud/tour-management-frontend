@@ -3,6 +3,7 @@ import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, For
 import { Input } from "@/components/ui/input";
 import { cn } from "@/lib/utils";
 import { useLoginMutation } from "@/redux/features/auth/auth.api";
+
 import { zodResolver } from "@hookform/resolvers/zod";
 import { LucideEye, LucideEyeClosed } from "lucide-react";
 import { useState } from "react";
@@ -40,6 +41,7 @@ export function LoginForm({ className, ...props }: React.HTMLAttributes<HTMLDivE
 
       if (res.success) {
         toast.success("Login successful");
+        navigate("/");
       }
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (error: any) {
