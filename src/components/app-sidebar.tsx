@@ -14,15 +14,20 @@ import {
   SidebarMenuSubItem,
   SidebarRail,
 } from "@/components/ui/sidebar";
+import { useUserInfoQuery } from "@/redux/features/auth/auth.api";
+import getSidebarItems from "@/utils/getSidebarItems";
 import { Link } from "react-router";
-import { adminSidebarItems } from "@/routes/adminSidebarItems";
+import type { IUser, TRole } from "@/types";
 
 // This is sample data.
-const data = {
-  navMain: adminSidebarItems,
-};
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
+  const { data: userData, isLoading: userDataLoading } = useUserInfoQuery();
+
+  const data = {
+    navMain: userDataLoading ? [] : getSidebarItems((userData?.data as unknown as IUser).role as TRole),
+  };
+
   return (
     <Sidebar {...props}>
       <SidebarHeader>
