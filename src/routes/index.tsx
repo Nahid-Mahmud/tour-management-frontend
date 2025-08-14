@@ -7,7 +7,7 @@ import Register from "@/pages/Register";
 import Verify from "@/pages/Verify";
 import generateRoutes from "@/utils/generateRoutes";
 
-import { createBrowserRouter } from "react-router";
+import { createBrowserRouter, Navigate } from "react-router";
 import { adminSidebarItems } from "./adminSidebarItems";
 import { userSidebarItems } from "./userSidebarItems";
 
@@ -30,12 +30,18 @@ const routes = createBrowserRouter([
   {
     path: "/admin",
     element: <DashboardLayout />,
-    children: [...generateRoutes(adminSidebarItems)],
+    children: [{ index: true, element: <Navigate to={"/admin/analytics"} /> }, ...generateRoutes(adminSidebarItems)],
   },
   {
     path: "/user",
     element: <DashboardLayout />,
-    children: [...generateRoutes(userSidebarItems)],
+    children: [
+      {
+        index: true,
+        element: <Navigate to={"/user/bookings"} />,
+      },
+      ...generateRoutes(userSidebarItems),
+    ],
   },
 
   {
