@@ -10,6 +10,9 @@ import generateRoutes from "@/utils/generateRoutes";
 import { createBrowserRouter, Navigate } from "react-router";
 import { adminSidebarItems } from "./adminSidebarItems";
 import { userSidebarItems } from "./userSidebarItems";
+import withAuth from "@/utils/withAuth";
+import React from "react";
+import UnauthorizedPage from "@/pages/Unauthorize";
 
 const routes = createBrowserRouter([
   {
@@ -29,12 +32,12 @@ const routes = createBrowserRouter([
 
   {
     path: "/admin",
-    element: <DashboardLayout />,
+    element: React.createElement(withAuth(DashboardLayout, ["ADMIN"])),
     children: [{ index: true, element: <Navigate to={"/admin/analytics"} /> }, ...generateRoutes(adminSidebarItems)],
   },
   {
     path: "/user",
-    element: <DashboardLayout />,
+    element: React.createElement(withAuth(DashboardLayout, ["USER"])),
     children: [
       {
         index: true,
@@ -55,6 +58,10 @@ const routes = createBrowserRouter([
   {
     path: "/verify",
     element: <Verify />,
+  },
+  {
+    path: "/unauthorized",
+    element: <UnauthorizedPage />,
   },
 ]);
 
