@@ -30,3 +30,21 @@ export interface Auth {
   provider: string;
   providerId: string;
 }
+
+export interface ITourTypeCreate {
+  name: string;
+}
+
+export interface IResponseStructure<T> {
+  success: boolean;
+  message: string;
+  data: T;
+  statusCode: number;
+}
+
+export interface ITourTypeResponse {
+  _id: string;
+  name: string;
+  createdAt: string;
+  updatedAt: string;
+}
