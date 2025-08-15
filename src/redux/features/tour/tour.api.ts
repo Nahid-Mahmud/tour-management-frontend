@@ -13,29 +13,25 @@ export const tourApi = baseApi.injectEndpoints({
 
     getAllTourType: builder.query<IResponseStructure<ITourTypeResponse[]>, void>({
       query: () => ({
-        url: "/tour/get-all-tour-types",
-        method: "GET",
-      }),
-    }),
-
-    getTourTypeById: builder.query<IResponseStructure<ITourTypeResponse>, string>({
-      query: (id) => ({
-        url: `/tour/get-tour-type/${id}`,
+        url: "/tour/tour-types",
         method: "GET",
       }),
     }),
 
     deleteTourTypeById: builder.mutation<IResponseStructure<null>, string>({
       query: (id) => ({
-        url: `/tour/delete-tour-type/${id}`,
+        url: `/tour/tour-types/${id}`,
         method: "DELETE",
       }),
     }),
 
-    updateTourTypeById: builder.mutation<IResponseStructure<ITourTypeResponse>, { id: string; data: Partial<ITourTypeCreate> }>({
+    updateTourTypeById: builder.mutation<
+      IResponseStructure<ITourTypeResponse>,
+      { id: string; data: Partial<ITourTypeCreate> }
+    >({
       query: ({ id, data }) => ({
-        url: `/tour/update-tour-type/${id}`,
-        method: "PUT",
+        url: `/tour/tour-types/${id}`,
+        method: "PATCH",
         data: data,
       }),
     }),
@@ -45,7 +41,6 @@ export const tourApi = baseApi.injectEndpoints({
 export const {
   useCreateTourTypeMutation,
   useGetAllTourTypeQuery,
-  useGetTourTypeByIdQuery,
   useDeleteTourTypeByIdMutation,
   useUpdateTourTypeByIdMutation,
 } = tourApi;
