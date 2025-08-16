@@ -57,7 +57,7 @@ export default function AddTourTypesModal() {
     <div>
       <Dialog open={open} onOpenChange={setOpen}>
         <DialogTrigger asChild>
-          <Button variant="outline">Open Dialog</Button>
+          <Button variant="outline">Add Tour Type</Button>
         </DialogTrigger>
         <DialogContent className="sm:max-w-[425px]">
           <DialogHeader>
