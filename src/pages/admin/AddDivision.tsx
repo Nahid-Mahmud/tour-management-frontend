@@ -1,7 +1,11 @@
+import AddDivisionModel from "@/modules/admin/division/AddDivisionModel";
+
 export default function AddDivision() {
   return (
     <div>
-      <h1 className="text-lg">This is AddDivision component</h1>
+      <div className="flex items-end justify-end">
+        <AddDivisionModel />
+      </div>
     </div>
   );
 }
