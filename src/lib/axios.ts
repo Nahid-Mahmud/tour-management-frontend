@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import { envConfig } from "@/config";
 import axios, { type AxiosRequestConfig } from "axios";
 
@@ -33,15 +32,15 @@ axiosInstance.interceptors.request.use(
 let isRefreshing = false;
 
 let pendingQueue: {
-  resolve: (value: any) => void;
-  reject: (value: any) => void;
+  resolve: (value: unknown) => void;
+  reject: (value: unknown) => void;
 }[] = [];
 
 /**
  * Process all queued requests after token refresh completes
  * @param error - If there's an error, reject all queued requests, otherwise resolve them
  */
-const processQQueue = (error: any) => {
+const processQQueue = (error: unknown) => {
   pendingQueue.forEach((promise) => {
     if (error) {
       promise.reject(error);
