@@ -65,11 +65,17 @@ axiosInstance.interceptors.response.use(
   async function onRejected(error) {
     // Error response (status outside 2xx) - handle token expiration
 
-    const originalRequest = error.config as AxiosRequestConfig;
+    const originalRequest = error.config as AxiosRequestConfig & { _retry?: boolean };
 
     // Check if the error is due to an expired token (401 status with specific message)
-    if (error.response.status === 401 && error.response.data.message === "Token has expired") {
+    if (
+      error.response.status === 401 &&
+      error.response.data.message === "Token has expired" &&
+      !originalRequest._retry
+    ) {
       console.log("Token has expired");
+
+      originalRequest._retry = true; // Mark this request as a retry attempt
 
       // If a token refresh is already in progress, queue this request
       if (isRefreshing) {
