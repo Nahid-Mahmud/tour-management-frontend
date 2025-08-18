@@ -48,3 +48,27 @@ export interface ITourTypeResponse {
   createdAt: string;
   updatedAt: string;
 }
+
+export interface ITour {
+  _id: string;
+  title: string;
+  description: string;
+  images: string[];
+  location: string;
+  constFrom: number;
+  startDate: string;
+  endDate: string;
+  included: string[];
+  excluded: string[];
+  amenities: string[];
+  tourPlan: string[];
+  maxGuest: number;
+  minAge: number;
+  division: string;
+  tourType: string;
+  departureLocation: string;
+  arrivalLocation: string;
+  createdAt: string;
+  updatedAt: string;
+  slug: string;
+}
